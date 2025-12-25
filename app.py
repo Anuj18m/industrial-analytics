@@ -7,6 +7,12 @@ from analytics.insights import generate_insights, generate_summary
 from analytics.alerts import generate_alerts
 from chatbot.qa_engine import answer_question
 
+from database.init_db import init_db
+
+# Initialize DB on startup (Cloud-safe)
+init_db()
+
+
 # ---------------- PAGE CONFIG ----------------
 st.set_page_config(page_title="Industrial Analytics", layout="wide")
 st.title("🏭 Industrial Analytics Platform")
