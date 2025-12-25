@@ -1,0 +1,17 @@
+# Virtual environment
+venv/
+.env/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Database (optional – see note below)
+database/industrial.db
+
+# Streamlit
+.streamlit/
+
+# OS
+.DS_Store
+Thumbs.db

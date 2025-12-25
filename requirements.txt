@@ -1,0 +1,5 @@
+streamlit>=1.30
+pandas>=2.0
+numpy>=1.24
+sqlite-utils>=3.35
+watchdog>=3.0

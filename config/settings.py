@@ -1,0 +1,3 @@
+DOWNTIME_THRESHOLD = 5        # hours
+ENERGY_WARNING_FACTOR = 1.1  # 10% above average
+REFRESH_OPTIONS = [5, 10, 30, 60]

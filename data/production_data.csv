@@ -1,0 +1,7 @@
+plant,date,output_tons,downtime_hours,energy_kwh
+Plant A,2024-01-01,1200,3,4500
+Plant A,2024-01-02,1150,6,4800
+Plant B,2024-01-01,1000,7,5200
+Plant B,2024-01-02,980,8,5300
+Plant C,2024-01-01,1300,2,4000
+Plant C,2024-01-02,1280,3,4100
