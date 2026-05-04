@@ -8,6 +8,7 @@ __pycache__/
 
 # Database (optional – see note below)
 database/industrial.db
+industrial.db
 
 # Streamlit
 .streamlit/
@@ -16,3 +17,7 @@ database/industrial.db
 .DS_Store
 Thumbs.db
 .env
+
+*.db
+# Logs
+logs/

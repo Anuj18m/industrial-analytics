@@ -7,7 +7,7 @@ from database.db import get_connection
 
 CSV_PATH = os.path.join("data", "production_data.csv")
 
-def init_database():
+def init_db():
     df = pd.read_csv(CSV_PATH)
     df["date"] = pd.to_datetime(df["date"])
 
@@ -18,4 +18,4 @@ def init_database():
     print("✅ Database initialized successfully")
 
 if __name__ == "__main__":
-    init_database()
+    init_db()

@@ -1,215 +1,168 @@
-# 🏭 Industrial Analytics Dashboard
+# Industrial Analytics Dashboard
 
-A real-time industrial analytics platform that simulates continuous production data ingestion and provides live KPIs, trends, alerts, and insights through an interactive dashboard.
+> Real-time industrial analytics system with live data ingestion, KPI tracking, and anomaly detection.
 
-This project is designed to reflect how modern manufacturing plants monitor operational performance in near real-time.
-
----
-
-## 📌 Problem Statement
-
-Manufacturing industries generate large volumes of operational data such as production output, machine downtime, and energy consumption.  
-Monitoring this data in real-time is critical for:
-
-- Operational efficiency
-- Downtime reduction
-- Energy optimization
-- Quick decision-making
-
-This project simulates such an industrial monitoring system using a database-driven analytics pipeline.
+A production-ready Streamlit dashboard for real-time monitoring of industrial operations with live KPIs, automated anomaly detection, and a rule-based conversational analytics chatbot.
 
 ---
 
-## 🎯 Project Objectives
+## Overview
 
-- Simulate real-time industrial data ingestion
-- Store and manage production data using a database
-- Display live KPIs and trends without data duplication
-- Generate insights and alerts automatically
-- Provide an interactive and stable dashboard experience
+Industrial facilities generate vast amounts of operational data that require continuous monitoring to identify inefficiencies and prevent downtime. This dashboard provides a unified platform for real-time visibility into production metrics, automated anomaly detection, and interactive query capabilities—enabling operations teams to make data-driven decisions without manual data analysis.
 
 ---
 
-## 🚀 Key Features
+## Key Features
 
-- 🔄 **Live Data Ingestion**  
-  Simulates continuous industrial data flow using an automated updater.
-
-- 🗄 **Database-Driven Architecture**  
-  Uses SQLite to mimic real production data storage instead of static CSV files.
-
-- ⏱ **Sliding Time-Window Analytics**  
-  Displays only recent data to prevent duplication and inflated metrics.
-
-- 📊 **Real-Time Dashboard**  
-  Live KPIs, charts, trends, and alerts using Streamlit.
-
-- ⚠ **Automated Alerts**  
-  Highlights abnormal conditions such as high downtime or energy usage.
-
-- 💬 **Interactive Chatbot**  
-  Allows users to ask natural language questions about the data.
-
-- 🪟 **Windows-Stable Execution**  
-  Handles Streamlit file-watcher issues for reliable execution on Windows.
+* **Real-Time KPIs**: Tracks production output, downtime, energy consumption, efficiency, and system health with live updates
+* **Automated Anomaly Detection**: Detects downtime spikes, energy anomalies, statistical outliers, and efficiency drops
+* **Conversational Analytics**: Query system metrics using a rule-based chatbot
+* **Sliding Time-Window Architecture**: Ensures accurate analytics without data duplication
+* **Single-Command Execution**: Full system runs with `streamlit run app.py`
 
 ---
 
-## 🧠 System Architecture (High Level)
+## Tech Stack
 
-```
-Data Generator (Simulated)
-          ↓
-  SQLite Database
-          ↓
-Data Loader (Pandas)
-          ↓
-Analytics Layer (KPIs, Alerts, Insights)
-          ↓
-  Streamlit Dashboard
-```
+| Layer               | Technology |
+| ------------------- | ---------- |
+| Frontend            | Streamlit  |
+| Backend             | Python     |
+| Data Processing     | Pandas     |
+| Database            | SQLite     |
+| Real-Time Ingestion | Threading  |
 
 ---
 
-## 🛠 Tech Stack
+## 📸 Screenshots
 
-| Component        | Technology |
-|------------------|------------|
-| Programming      | Python |
-| Dashboard        | Streamlit |
-| Data Processing  | Pandas, NumPy |
-| Database         | SQLite |
-| Version Control  | Git, GitHub |
+### Dashboard
 
----
+![Dashboard](screenshots/dashboard_kpis_overview.png)
 
-## 📂 Project Structure
+### Analytics & Alerts
 
-```
-industrial-analytics/
-│
-├── analytics/
-│   ├── kpis.py
-│   ├── alerts.py
-│   ├── insights.py
-│   └── charts.py
-│
-├── chatbot/
-│   └── qa_engine.py
-│
-├── database/
-│   ├── db.py
-│   ├── init_db.py
-│   └── data_updater.py
-│
-├── ingestion/
-│   └── data_loader.py
-│
-├── data/
-│   └── production_data.csv
-│
-├── app.py
-├── requirements.txt
-├── README.md
-└── .gitignore
-```
+![Analytics](screenshots/dashboard_insights_alerts.png)
 
----
+### Chatbot
 
-## ▶️ How to Run the Project
-
-### 1️⃣ Create Virtual Environment
-```bash
-python -m venv venv
-venv\Scripts\activate
-```
-
-### 2️⃣ Install Dependencies
-```bash
-pip install -r requirements.txt
-```
-
-### 3️⃣ Initialize Database
-```bash
-python database/init_db.py
-```
-
-### 4️⃣ Start Live Data Generator
-```bash
-python database/data_updater.py
-```
-
-### 5️⃣ Run the Dashboard
-```bash
-streamlit run app.py --server.fileWatcherType none
-```
-
----
-## 📸 Project Preview
-
-![Dashboard KPIs](screenshots/dashboard_kpis_overview.png)
-![Insights & Alerts](screenshots/dashboard_insights_alerts.png)
-![Live Data Ingestion](screenshots/live_data_ingestion_terminal.png)
 ![Chatbot](screenshots/chatbot_query_response.png)
 
 ---
 
-## 📊 KPIs Tracked
+## How It Works
 
-- Total Production Output
-- Average Downtime
-- Average Energy Consumption
-- Overall Plant Health Score
+The system follows a three-layer architecture:
 
----
+1. **Data Ingestion Layer**
+   Continuously updates production data into SQLite using a background thread
 
-## ⚠ Alert Logic (Examples)
+2. **Analytics Layer**
+   Computes KPIs, detects anomalies, and generates insights using time-windowed analysis
 
-- Downtime exceeds acceptable threshold
-- Energy consumption spikes
-- Production output drops below normal range
+3. **Presentation Layer**
+   Displays real-time metrics and provides a chatbot interface for querying data
 
-Alerts update dynamically as new data arrives.
-
----
-
-## 💬 Chatbot Capabilities
-
-The chatbot supports questions like:
-
-- "What is the total production?"
-- "Which plant has highest downtime?"
-- "How is energy consumption today?"
+```
+Streamlit App
+   ↓
+Analytics Engine (KPIs, Alerts, Insights)
+   ↓
+Background Updater Thread
+   ↓
+SQLite Database
+```
 
 ---
 
-## 🧪 Design Decisions & Challenges Solved
+## KPI Definitions
 
-- Avoided CSV-based analytics to simulate real industry pipelines
-- Handled mixed datetime formats safely using Pandas
-- Prevented data duplication using sliding time-window analytics
-- Resolved Streamlit auto-refresh and Windows file watcher issues
-- Separated ingestion, analytics, and visualization layers
-
----
-
-## 🔮 Future Enhancements
-
-- Predictive maintenance using machine learning
-- Cloud database integration (PostgreSQL / BigQuery)
-- Role-based dashboards
-- Alert notifications via email or SMS
-- Deployment on cloud platforms
+* **Total Production Output**: Windowed sum of production (tons)
+* **Average Downtime**: Mean equipment downtime
+* **Average Energy Consumption**: Mean energy usage (kWh)
+* **Efficiency Score**: Output relative to energy and downtime
+* **Health Score**: Weighted composite performance metric
+* **Production Trend**: Moving average with direction indicator
 
 ---
 
-## 👤 Author
+## Alert Conditions
 
-**Anuj Mhatre**  
-IT Student | TCET
+| Alert Type          | Trigger Condition      |
+| ------------------- | ---------------------- |
+| Downtime Spike      | Avg downtime > 6 hours |
+| Energy Anomaly      | Energy > 1.2× median   |
+| Statistical Outlier | Output > mean + 2σ     |
+| Efficiency Warning  | Efficiency < threshold |
 
 ---
 
-## 📜 License
+## Run Locally
 
-This project is for academic and learning purposes.
+```bash
+pip install -r requirements.txt
+streamlit run app.py
+```
+
+---
+
+## Configuration
+
+**Data Mode (database/data_updater.py):**
+
+```python
+MODE = "dataset"      # realistic replay
+# MODE = "simulation"  # synthetic data
+```
+
+**Dashboard Settings (UI Sidebar):**
+
+* Time window: 1–30 minutes
+* Refresh interval: 5–30 seconds
+
+---
+
+## Project Structure
+
+```
+industrial-analytics/
+├── app.py
+├── requirements.txt
+├── analytics/
+├── database/
+├── ingestion/
+├── chatbot/
+├── config/
+├── data/
+└── screenshots/
+```
+
+---
+
+## Live Demo
+
+Coming soon (deployment in progress)
+
+---
+
+## Project Significance
+
+This project demonstrates how real-time industrial analytics systems are designed and implemented.
+
+Key engineering aspects:
+
+* Background data ingestion without blocking UI
+* Sliding window analytics for consistency
+* Composite KPIs for actionable insights
+* Conversational interface for accessibility
+
+---
+
+## Future Improvements
+
+* Multi-plant comparative analytics
+* Predictive maintenance using ML
+* Custom alert thresholds
+* Report export (PDF/Excel)
+* Role-based access control
+* Scalable database (PostgreSQL)
