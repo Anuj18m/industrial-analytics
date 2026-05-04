@@ -1,6 +1,5 @@
 import streamlit as st
 import time
-import threading
 from datetime import datetime
 import traceback
 
@@ -13,20 +12,15 @@ from chatbot.qa_engine import answer_question
 from database.init_db import init_db
 from database.data_updater import start_updater
 
-# Initialize DB on startup (Cloud-safe)
-try:
-    init_db()
-except Exception as e:
-    pass  # Database might already be initialized
+# Initialize DB on startup so deploys always create the database first
+init_db()
 
-# Start the embedded data updater in a background thread once per session
+# Start the embedded data updater once per session
 if 'updater_started' not in st.session_state:
     st.session_state.updater_started = False
 
 if not st.session_state.updater_started:
-    # Run updater as daemon so Streamlit shutdown stops it automatically
-    t = threading.Thread(target=start_updater, kwargs={'interval': 5}, daemon=True)
-    t.start()
+    start_updater(interval=5)
     st.session_state.updater_started = True
 
 
@@ -58,8 +52,7 @@ except Exception as e:
     df = None
 
 if df is None or df.empty:
-    st.warning("Initializing data... please wait a few seconds.")
-    st.stop()
+    st.warning("Initializing data... showing empty dashboard for now.")
 
 tab1, tab2 = st.tabs(["📊 Dashboard", "💬 Chatbot"])
 

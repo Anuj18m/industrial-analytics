@@ -141,7 +141,7 @@ industrial-analytics/
 
 ## Live Demo
 
-Coming soon (deployment in progress)
+https://industrial-analytics-algoonerd.streamlit.app/
 
 ---
 

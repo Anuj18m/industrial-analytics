@@ -1,5 +1,6 @@
 import time
 import random
+import threading
 import pandas as pd
 from datetime import datetime, timedelta
 import os, sys
@@ -10,6 +11,7 @@ from database.db import get_connection
 PLANTS = ["Plant A", "Plant B", "Plant C"]
 MODE = "dataset"  # "simulation" or "dataset"
 CSV_PATH = os.path.join("data", "production_data.csv")
+_updater_thread = None
 
 
 def generate_row():
@@ -48,36 +50,60 @@ def load_dataset_rows():
             yield generate_row()
 
 
-def start_updater(interval=10):
-    """Start data ingestion loop"""
-    print(f"🚀 Starting data updater in {MODE.upper()} mode...")
-    
-    try:
-        if MODE.lower() == "dataset":
+def update_data_once(row_generator=None):
+    """Insert a single production row into the database."""
+    if MODE.lower() == "dataset":
+        if row_generator is None:
             row_generator = load_dataset_rows()
-        else:
-            row_generator = None
-        
-        while True:
-            try:
-                if MODE.lower() == "dataset":
-                    row = next(row_generator)
-                else:
-                    row = generate_row()
-                
-                df = pd.DataFrame([row])
-                conn = get_connection()
-                df.to_sql("production_data", conn, if_exists="append", index=False)
-                conn.close()
+        row = next(row_generator)
+    else:
+        row = generate_row()
 
-                print(f"✅ Inserted [{MODE.upper()}]: {row}")
-                time.sleep(interval)
-            except Exception as e:
-                print(f"❌ Error inserting row: {e}")
-                time.sleep(interval)
-    except KeyboardInterrupt:
-        print("\n⛔ Data updater stopped.")
+    df = pd.DataFrame([row])
+    conn = get_connection()
+    try:
+        df.to_sql("production_data", conn, if_exists="append", index=False)
+    finally:
+        conn.close()
+
+    print(f"✅ Data inserted successfully [{MODE.upper()}]: {row}")
+    return row_generator
+
+
+def _run_updater_loop(interval=10):
+    """Background loop that keeps inserting data."""
+    print(f"🚀 Starting data updater in {MODE.upper()} mode...")
+
+    row_generator = load_dataset_rows() if MODE.lower() == "dataset" else None
+
+    while True:
+        try:
+            row_generator = update_data_once(row_generator)
+        except Exception as e:
+            print(f"❌ Updater error: {e}")
+        time.sleep(interval)
+
+
+def start_updater(interval=10):
+    """Start the updater in a daemon thread and return the thread."""
+    global _updater_thread
+
+    if _updater_thread is not None and _updater_thread.is_alive():
+        return _updater_thread
+
+    _updater_thread = threading.Thread(
+        target=_run_updater_loop,
+        kwargs={"interval": interval},
+        daemon=True,
+    )
+    _updater_thread.start()
+    return _updater_thread
 
 
 if __name__ == "__main__":
-    start_updater()
+    thread = start_updater()
+    try:
+        while thread.is_alive():
+            time.sleep(1)
+    except KeyboardInterrupt:
+        print("\n⛔ Data updater stopped.")
