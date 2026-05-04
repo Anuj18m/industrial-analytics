@@ -10,10 +10,15 @@ from analytics.alerts import generate_alerts
 from chatbot.qa_engine import answer_question
 
 from database.init_db import init_db
-from database.data_updater import start_updater
+from database.data_updater import start_updater, update_data_once
 
 # Initialize DB on startup so deploys always create the database first
 init_db()
+
+# Insert one row immediately so first load is never empty
+if 'initial_data_loaded' not in st.session_state:
+    update_data_once()
+    st.session_state.initial_data_loaded = True
 
 # Start the embedded data updater once per session
 if 'updater_started' not in st.session_state:
