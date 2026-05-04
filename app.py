@@ -6,6 +6,8 @@ from analytics.kpis import calculate_kpis, calculate_health_score
 from analytics.insights import generate_insights, generate_summary
 from analytics.alerts import generate_alerts
 from chatbot.qa_engine import answer_question
+from github_profile.analyzer import fetch_profile
+from github_profile.report_generator import generate_report
 
 from database.init_db import init_db
 
@@ -41,7 +43,7 @@ if df.empty:
     time.sleep(refresh_seconds)
     st.rerun()
 
-tab1, tab2 = st.tabs(["📊 Dashboard", "💬 Chatbot"])
+tab1, tab2, tab3 = st.tabs(["📊 Dashboard", "💬 Chatbot", "👤 GitHub Profile"])
 
 # ---------------- DASHBOARD ----------------
 with tab1:
@@ -84,6 +86,33 @@ with tab2:
     question = st.text_input("Ask about production, downtime, or energy")
     if question:
         st.success(answer_question(question, df))
+
+# ---------------- GITHUB PROFILE ----------------
+with tab3:
+    st.header("👤 GitHub Profile Analysis")
+    st.caption("Fact-based analysis using the public GitHub REST API — no assumptions, no hidden data.")
+
+    gh_username = st.text_input(
+        "GitHub username",
+        value="Anuj18m",
+        help="Enter any public GitHub username to generate the analysis report.",
+    )
+
+    if st.button("🔍 Generate Report", type="primary"):
+        with st.spinner(f"Fetching public data for @{gh_username} …"):
+            try:
+                profile = fetch_profile(gh_username)
+                report_md = generate_report(profile)
+                st.success(f"Report generated for @{gh_username} ({profile['public_repos']} public repos)")
+                st.download_button(
+                    label="⬇️ Download Report (.md)",
+                    data=report_md,
+                    file_name=f"{gh_username}_github_analysis.md",
+                    mime="text/markdown",
+                )
+                st.markdown(report_md, unsafe_allow_html=False)
+            except Exception as exc:
+                st.error(f"Could not generate report: {exc}")
 
 # ---------------- AUTO RERUN ----------------
 time.sleep(refresh_seconds)
