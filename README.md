@@ -1,168 +1,107 @@
 # Industrial Analytics Dashboard
 
-> Real-time industrial analytics system with live data ingestion, KPI tracking, and anomaly detection.
+[![Live App](https://img.shields.io/badge/Live%20App-Open-green?style=flat-square)](https://industrial-analytics-algoonerd.streamlit.app/)
+[![Python](https://img.shields.io/badge/Python-3.x-blue?style=flat-square)]()
+[![Streamlit](https://img.shields.io/badge/Framework-Streamlit-red?style=flat-square)]()
+[![SQLite](https://img.shields.io/badge/Database-SQLite-lightgrey?style=flat-square)]()
 
-A production-ready Streamlit dashboard for real-time monitoring of industrial operations with live KPIs, automated anomaly detection, and a rule-based conversational analytics chatbot.
+📊 Real-time industrial analytics system focused on **data pipelines, not just dashboards**
 
 ---
 
 ## Overview
 
-Industrial facilities generate vast amounts of operational data that require continuous monitoring to identify inefficiencies and prevent downtime. This dashboard provides a unified platform for real-time visibility into production metrics, automated anomaly detection, and interactive query capabilities—enabling operations teams to make data-driven decisions without manual data analysis.
+This project simulates a real-world industrial monitoring system where production data is continuously ingested, processed, and analyzed in real time.
+
+Instead of focusing only on visualization, the system is designed around:
+
+* reliable data ingestion
+* consistent metric computation
+* stable system behavior under continuous updates
 
 ---
 
-## Key Features
+## Core Capabilities
 
-* **Real-Time KPIs**: Tracks production output, downtime, energy consumption, efficiency, and system health with live updates
-* **Automated Anomaly Detection**: Detects downtime spikes, energy anomalies, statistical outliers, and efficiency drops
-* **Conversational Analytics**: Query system metrics using a rule-based chatbot
-* **Sliding Time-Window Architecture**: Ensures accurate analytics without data duplication
-* **Single-Command Execution**: Full system runs with `streamlit run app.py`
-
----
-
-## Tech Stack
-
-| Layer               | Technology |
-| ------------------- | ---------- |
-| Frontend            | Streamlit  |
-| Backend             | Python     |
-| Data Processing     | Pandas     |
-| Database            | SQLite     |
-| Real-Time Ingestion | Threading  |
+* ⚙️ Continuous data ingestion using a background thread
+* 📈 Real-time KPI computation (output, downtime, energy, efficiency)
+* 🚨 Anomaly detection using statistical thresholds
+* 🖥️ Interactive monitoring dashboard
+* 💬 Rule-based query interface for quick insights
 
 ---
 
-## 📸 Screenshots
+## System Design
 
-### Dashboard
-
-![Dashboard](screenshots/dashboard_kpis_overview.png)
-
-### Analytics & Alerts
-
-![Analytics](screenshots/dashboard_insights_alerts.png)
-
-### Chatbot
-
-![Chatbot](screenshots/chatbot_query_response.png)
-
----
-
-## How It Works
-
-The system follows a three-layer architecture:
-
-1. **Data Ingestion Layer**
-   Continuously updates production data into SQLite using a background thread
-
-2. **Analytics Layer**
-   Computes KPIs, detects anomalies, and generates insights using time-windowed analysis
-
-3. **Presentation Layer**
-   Displays real-time metrics and provides a chatbot interface for querying data
-
-```
-Streamlit App
+```text id="m0e6xf"
+Streamlit UI
    ↓
-Analytics Engine (KPIs, Alerts, Insights)
+Analytics Layer (KPIs, Alerts, Insights)
    ↓
-Background Updater Thread
+Background Data Updater
    ↓
 SQLite Database
 ```
 
 ---
 
-## KPI Definitions
+## Engineering Highlights
 
-* **Total Production Output**: Windowed sum of production (tons)
-* **Average Downtime**: Mean equipment downtime
-* **Average Energy Consumption**: Mean energy usage (kWh)
-* **Efficiency Score**: Output relative to energy and downtime
-* **Health Score**: Weighted composite performance metric
-* **Production Trend**: Moving average with direction indicator
-
----
-
-## Alert Conditions
-
-| Alert Type          | Trigger Condition      |
-| ------------------- | ---------------------- |
-| Downtime Spike      | Avg downtime > 6 hours |
-| Energy Anomaly      | Energy > 1.2× median   |
-| Statistical Outlier | Output > mean + 2σ     |
-| Efficiency Warning  | Efficiency < threshold |
+* 🔄 Non-blocking ingestion architecture using daemon threads
+* 🧠 Safe database initialization (no table drops, no race conditions)
+* 📊 Sliding window analytics for consistent real-time metrics
+* 🧩 Modular design separating ingestion, analytics, and UI
+* ⚡ Deployment-ready (handles cold start, threading, and DB sync issues)
 
 ---
 
-## Run Locally
+## Demo
 
-```bash
+![Dashboard](screenshots/dashboard_kpis_overview.png)
+![Analytics](screenshots/dashboard_insights_alerts.png)
+![Chatbot](screenshots/chatbot_query_response.png)
+
+
+🚀 **Live Demo:** https://industrial-analytics-algoonerd.streamlit.app/
+
+📂 **Repository:** https://github.com/Anuj18m/industrial-analytics
+
+---
+
+## Running Locally
+
+```bash id="c3c0p9"
 pip install -r requirements.txt
 streamlit run app.py
 ```
 
 ---
 
-## Configuration
-
-**Data Mode (database/data_updater.py):**
-
-```python
-MODE = "dataset"      # realistic replay
-# MODE = "simulation"  # synthetic data
-```
-
-**Dashboard Settings (UI Sidebar):**
-
-* Time window: 1–30 minutes
-* Refresh interval: 5–30 seconds
-
----
-
 ## Project Structure
 
-```
+```text id="8k0x9l"
 industrial-analytics/
 ├── app.py
-├── requirements.txt
 ├── analytics/
 ├── database/
 ├── ingestion/
 ├── chatbot/
-├── config/
 ├── data/
 └── screenshots/
 ```
 
 ---
 
-## Live Demo
+## Future Scope
 
-https://industrial-analytics-algoonerd.streamlit.app/
-
----
-
-## Project Significance
-
-This project demonstrates how real-time industrial analytics systems are designed and implemented.
-
-Key engineering aspects:
-
-* Background data ingestion without blocking UI
-* Sliding window analytics for consistency
-* Composite KPIs for actionable insights
-* Conversational interface for accessibility
+* 🤖 ML-based anomaly detection
+* 🏭 Multi-plant comparative analytics
+* 🗄️ Migration to PostgreSQL
+* 🔐 Authentication & role-based access
 
 ---
 
-## Future Improvements
+## Author
 
-* Multi-plant comparative analytics
-* Predictive maintenance using ML
-* Custom alert thresholds
-* Report export (PDF/Excel)
-* Role-based access control
-* Scalable database (PostgreSQL)
+**Anuj Mhatre**
+🔗 https://linkedin.com/in/anujmhatre17
