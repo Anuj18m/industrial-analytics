@@ -16,7 +16,7 @@ from database.init_db import init_db
 from database.db import DB_PATH
 from database.data_updater import start_updater, update_data_once
 
-# Initialize DB on startup so deploys always create the database first
+# Initialize DB on startup once per Streamlit session
 if "db_initialized" not in st.session_state:
     init_db()
     st.session_state.db_initialized = True
