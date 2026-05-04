@@ -17,7 +17,9 @@ from database.db import DB_PATH
 from database.data_updater import start_updater, update_data_once
 
 # Initialize DB on startup so deploys always create the database first
-init_db()
+if "db_initialized" not in st.session_state:
+    init_db()
+    st.session_state.db_initialized = True
 
 # Insert one row immediately so first load is never empty
 if 'initial_data_loaded' not in st.session_state:

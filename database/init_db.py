@@ -1,21 +1,26 @@
 import os
 import sys
-import pandas as pd
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from database.db import get_connection
 
-CSV_PATH = os.path.join("data", "production_data.csv")
-
 def init_db():
-    df = pd.read_csv(CSV_PATH)
-    df["date"] = pd.to_datetime(df["date"])
-
     conn = get_connection()
-    df.to_sql("production_data", conn, if_exists="replace", index=False)
-    conn.close()
+    try:
+        conn.execute("""
+        CREATE TABLE IF NOT EXISTS production_data (
+            plant TEXT,
+            date TEXT,
+            output_tons INTEGER,
+            downtime_hours REAL,
+            energy_kwh INTEGER
+        )
+        """)
+        conn.commit()
+    finally:
+        conn.close()
 
-    print("✅ Database initialized successfully")
+    print("✅ Database initialized safely")
 
 if __name__ == "__main__":
     init_db()
