@@ -1,7 +1,10 @@
 import streamlit as st
 import time
+import sqlite3
 from datetime import datetime
 import traceback
+
+import pandas as pd
 
 from ingestion.data_loader import fetch_data
 from analytics.kpis import calculate_kpis, calculate_health_score
@@ -10,6 +13,7 @@ from analytics.alerts import generate_alerts
 from chatbot.qa_engine import answer_question
 
 from database.init_db import init_db
+from database.db import DB_PATH
 from database.data_updater import start_updater, update_data_once
 
 # Initialize DB on startup so deploys always create the database first
@@ -19,6 +23,13 @@ init_db()
 if 'initial_data_loaded' not in st.session_state:
     update_data_once()
     st.session_state.initial_data_loaded = True
+
+# Debug the active DB file and confirm the table has rows
+conn = sqlite3.connect(DB_PATH)
+df_debug = pd.read_sql("SELECT * FROM production_data", conn)
+conn.close()
+print("DEBUG DB PATH:", DB_PATH)
+print("DEBUG ROW COUNT:", len(df_debug))
 
 # Start the embedded data updater once per session
 if 'updater_started' not in st.session_state:
